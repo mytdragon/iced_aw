@@ -21,7 +21,7 @@ pub enum Message {
 
 fn main() -> iced::Result {
     iced::application(
-        "Typed Input example",
+        TypedInputDemo::default,
         TypedInputDemo::update,
         TypedInputDemo::view,
     )

@@ -4,12 +4,12 @@
 
 use iced::{
     advanced::{
+        debug::core::window,
         layout::{Limits, Node},
         renderer,
         widget::Tree,
         Clipboard, Layout, Shell, Widget,
     },
-    event,
     mouse::{self, Cursor},
     Alignment, Border, Color, Element, Event, Length, Padding, Point, Rectangle, Shadow, Size,
 };
@@ -55,6 +55,8 @@ where
     class: Theme::Class<'a>,
     /// The content [`Element`] of the [`Badge`].
     content: Element<'a, Message, Theme, Renderer>,
+    /// The [`Status`] of the [`Badge`]
+    status: Option<Status>,
 }
 
 impl<'a, Message, Theme, Renderer> Badge<'a, Message, Theme, Renderer>
@@ -78,6 +80,7 @@ where
             vertical_alignment: Alignment::Center,
             class: Theme::default(),
             content: content.into(),
+            status: None,
         }
     }
 
@@ -177,18 +180,18 @@ where
         Node::with_children(size.expand(padding), vec![content])
     }
 
-    fn on_event(
+    fn update(
         &mut self,
         state: &mut Tree,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
-    ) -> event::Status {
-        self.content.as_widget_mut().on_event(
+    ) {
+        self.content.as_widget_mut().update(
             &mut state.children[0],
             event,
             layout
@@ -200,7 +203,19 @@ where
             clipboard,
             shell,
             viewport,
-        )
+        );
+
+        let current_status = if cursor.is_over(layout.bounds()) {
+            Status::Hovered
+        } else {
+            Status::Active
+        };
+
+        if let Event::Window(window::Event::RedrawRequested(_now)) = event {
+            self.status = Some(current_status);
+        } else if self.status.is_some_and(|status| status != current_status) {
+            shell.request_redraw();
+        }
     }
 
     fn mouse_interaction(
@@ -232,14 +247,8 @@ where
     ) {
         let bounds = layout.bounds();
         let mut children = layout.children();
-        let is_mouse_over = bounds.contains(cursor.position().unwrap_or_default());
-        let status = if is_mouse_over {
-            Status::Hovered
-        } else {
-            Status::Active
-        };
 
-        let style_sheet = theme.style(&self.class, status);
+        let style_sheet = theme.style(&self.class, self.status.unwrap_or(Status::Active));
 
         //println!("height: {}", bounds.height);
         // 34 15

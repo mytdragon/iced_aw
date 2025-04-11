@@ -607,17 +607,18 @@ where
         node
     }
 
-    fn on_event(
+    fn update(
         &mut self,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
-    ) -> event::Status {
+    ) {
         if event::Status::Captured == self.on_event_keyboard(&event) {
-            return event::Status::Captured;
+            shell.capture_event();
+            return;
         }
 
         let mut children = layout.children();
@@ -626,7 +627,9 @@ where
         let clock_layout = children
             .next()
             .expect("widget: Layout should have a clock canvas layout");
-        let clock_status = self.on_event_clock(&event, clock_layout, cursor);
+        if event::Status::Captured == self.on_event_clock(&event, clock_layout, cursor) {
+            shell.capture_event();
+        }
 
         // ----------- Digital clock ------------------
         let digital_clock_layout = children
@@ -635,17 +638,20 @@ where
             .children()
             .next()
             .expect("widget: Layout should have a digital clock layout");
-        let digital_clock_status =
-            self.on_event_digital_clock(&event, digital_clock_layout, cursor);
+        if event::Status::Captured
+            == self.on_event_digital_clock(&event, digital_clock_layout, cursor)
+        {
+            shell.capture_event();
+        }
 
         // ----------- Buttons ------------------------
         let cancel_button_layout = children
             .next()
             .expect("widget: Layout should have a cancel button layout for a TimePicker");
 
-        let cancel_status = self.cancel_button.on_event(
+        self.cancel_button.update(
             &mut self.tree.children[0],
-            event.clone(),
+            event,
             cancel_button_layout,
             cursor,
             renderer,
@@ -660,7 +666,7 @@ where
 
         let mut fake_messages: Vec<Message> = Vec::new();
 
-        let submit_status = self.submit_button.on_event(
+        self.submit_button.update(
             &mut self.tree.children[1],
             event,
             submit_button_layout,
@@ -696,11 +702,6 @@ where
 
             shell.publish((self.on_submit)(time));
         }
-
-        clock_status
-            .merge(digital_clock_status)
-            .merge(cancel_status)
-            .merge(submit_status)
     }
 
     fn mouse_interaction(
@@ -1243,8 +1244,8 @@ fn draw_clock<Message, Theme>(
                     .clock_number_color,
                 size: Pixels(period_size),
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: Horizontal::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
             };
@@ -1288,8 +1289,8 @@ fn draw_clock<Message, Theme>(
                         .clock_number_color,
                     size: Pixels(number_size),
                     font: renderer.default_font(),
-                    horizontal_alignment: Horizontal::Center,
-                    vertical_alignment: Vertical::Center,
+                    align_x: Horizontal::Center,
+                    align_y: Vertical::Center,
                     shaping: text::Shaping::Basic,
                     line_height: text::LineHeight::Relative(1.3),
                 };
@@ -1323,8 +1324,8 @@ fn draw_clock<Message, Theme>(
                             .clock_number_color,
                         size: Pixels(number_size),
                         font: renderer.default_font(),
-                        horizontal_alignment: Horizontal::Center,
-                        vertical_alignment: Vertical::Center,
+                        align_x: Horizontal::Center,
+                        align_y: Vertical::Center,
                         shaping: text::Shaping::Basic,
                         line_height: text::LineHeight::Relative(1.3),
                     };
@@ -1369,8 +1370,8 @@ fn draw_clock<Message, Theme>(
                                 .clock_number_color,
                             size: Pixels(number_size),
                             font: renderer.default_font(),
-                            horizontal_alignment: Horizontal::Center,
-                            vertical_alignment: Vertical::Center,
+                            align_x: Horizontal::Center,
+                            align_y: Vertical::Center,
                             shaping: text::Shaping::Basic,
                             line_height: text::LineHeight::Relative(1.3),
                         };
@@ -1479,8 +1480,8 @@ fn draw_digital_clock<Message, Theme>(
                 bounds: Size::new(up_bounds.width, up_bounds.height),
                 size: Pixels(renderer.default_size().0 + if up_arrow_hovered { 1.0 } else { 0.0 }),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1500,8 +1501,8 @@ fn draw_digital_clock<Message, Theme>(
                 bounds: Size::new(center_bounds.width, center_bounds.height),
                 size: renderer.default_size(),
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1524,8 +1525,8 @@ fn draw_digital_clock<Message, Theme>(
                     renderer.default_size().0 + if down_arrow_hovered { 1.0 } else { 0.0 },
                 ),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1576,8 +1577,8 @@ fn draw_digital_clock<Message, Theme>(
             ),
             size: renderer.default_size(),
             font: renderer.default_font(),
-            horizontal_alignment: Horizontal::Center,
-            vertical_alignment: Vertical::Center,
+            align_x: text::Alignment::Center,
+            align_y: Vertical::Center,
             line_height: text::LineHeight::Relative(1.3),
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),
@@ -1615,8 +1616,8 @@ fn draw_digital_clock<Message, Theme>(
                 ),
                 size: renderer.default_size(),
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1656,8 +1657,8 @@ fn draw_digital_clock<Message, Theme>(
                 bounds: Size::new(period.bounds().width, period.bounds().height),
                 size: renderer.default_size(),
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),

@@ -612,24 +612,23 @@ where
         node
     }
 
-    fn on_event(
+    fn update(
         &mut self,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
-    ) -> event::Status {
+    ) {
         if event::Status::Captured == self.on_event_keyboard(&event) {
             self.state.sat_value_canvas_cache.clear();
             self.state.hue_canvas_cache.clear();
-            return event::Status::Captured;
+            shell.capture_event();
+            return;
         }
 
         let mut children = layout.children();
-
-        let status = event::Status::Ignored;
 
         // ----------- Block 1 ----------------------
         let block1_layout = children
@@ -661,9 +660,9 @@ where
         let cancel_button_layout = block2_children
             .next()
             .expect("widget: Layout should have a cancel button layout for a ColorPicker");
-        let cancel_button_status = self.cancel_button.on_event(
+        self.cancel_button.update(
             &mut self.tree.children[0],
-            event.clone(),
+            event,
             cancel_button_layout,
             cursor,
             renderer,
@@ -675,7 +674,7 @@ where
         let submit_button_layout = block2_children
             .next()
             .expect("widget: Layout should have a submit button layout for a ColorPicker");
-        let submit_button_status = self.submit_button.on_event(
+        self.submit_button.update(
             &mut self.tree.children[1],
             event,
             submit_button_layout,
@@ -697,12 +696,6 @@ where
             self.state.sat_value_canvas_cache.clear();
             self.state.hue_canvas_cache.clear();
         }
-
-        status
-            .merge(hsv_color_status)
-            .merge(rgba_color_status)
-            .merge(cancel_button_status)
-            .merge(submit_button_status)
     }
 
     fn mouse_interaction(
@@ -1427,8 +1420,8 @@ fn rgba_color(
                 bounds: Size::new(label_layout.bounds().width, label_layout.bounds().height),
                 size: renderer.default_size(),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
@@ -1511,8 +1504,8 @@ fn rgba_color(
                 bounds: Size::new(value_layout.bounds().width, value_layout.bounds().height),
                 size: renderer.default_size(),
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: iced::widget::text::LineHeight::Relative(1.3),
                 shaping: iced::widget::text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
@@ -1653,8 +1646,8 @@ fn hex_text(
             bounds: Size::new(bounds.width, bounds.height),
             size: renderer.default_size(),
             font: renderer.default_font(),
-            horizontal_alignment: Horizontal::Center,
-            vertical_alignment: Vertical::Center,
+            align_x: text::Alignment::Center,
+            align_y: Vertical::Center,
             line_height: text::LineHeight::Relative(1.3),
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),

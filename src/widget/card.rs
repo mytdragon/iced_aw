@@ -6,17 +6,16 @@ use iced::{
     advanced::{
         layout::{Limits, Node},
         renderer,
-        text::LineHeight,
+        text::{self, LineHeight},
         widget::{Operation, Tree},
         Clipboard, Layout, Shell, Widget,
     },
-    alignment::{Horizontal, Vertical},
-    event,
+    alignment::Vertical,
     mouse::{self, Cursor},
     touch,
     widget::text::Wrapping,
-    Alignment, Border, Color, Element, Event, Length, Padding, Pixels, Point, Rectangle, Shadow,
-    Size, Vector,
+    window, Alignment, Border, Color, Element, Event, Length, Padding, Pixels, Point, Rectangle,
+    Shadow, Size, Vector,
 };
 use iced_fonts::{
     required::{icon_to_string, RequiredIcons},
@@ -83,6 +82,8 @@ where
     foot: Option<Element<'a, Message, Theme, Renderer>>,
     /// The style of the [`Card`].
     class: Theme::Class<'a>,
+    /// The last [`mouse::Interaction`] of the [`Card`].
+    last_mouse_interaction: Option<mouse::Interaction>,
 }
 
 impl<'a, Message, Theme, Renderer> Card<'a, Message, Theme, Renderer>
@@ -114,6 +115,7 @@ where
             body: body.into(),
             foot: None,
             class: Theme::default(),
+            last_mouse_interaction: None,
         }
     }
 
@@ -308,26 +310,26 @@ where
         )
     }
 
-    fn on_event(
+    fn update(
         &mut self,
         state: &mut Tree,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
-    ) -> event::Status {
+    ) {
         let mut children = layout.children();
 
         let head_layout = children
             .next()
             .expect("widget: Layout should have a head layout");
         let mut head_children = head_layout.children();
-        let head_status = self.head.as_widget_mut().on_event(
+        self.head.as_widget_mut().update(
             &mut state.children[0],
-            event.clone(),
+            event,
             head_children
                 .next()
                 .expect("widget: Layout should have a head content layout"),
@@ -338,36 +340,35 @@ where
             viewport,
         );
 
-        let close_status = head_children
-            .next()
-            .map_or(event::Status::Ignored, |close_layout| {
-                match event {
+        let mut current_interaction = mouse::Interaction::default();
+
+        if let Some(close_layout) = head_children.next() {
+            let is_hovered = close_layout
+                .bounds()
+                .contains(cursor.position().unwrap_or_default());
+
+            if is_hovered {
+                current_interaction = mouse::Interaction::Pointer;
+
+                if matches!(
+                    event,
                     Event::Mouse(mouse::Event::ButtonPressed(mouse::Button::Left))
-                    | Event::Touch(touch::Event::FingerPressed { .. }) => self
-                        .on_close
-                        .clone()
-                        // TODO: `let` expressions in this position are experimental
-                        // see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
-                        .filter(|_| {
-                            close_layout
-                                .bounds()
-                                .contains(cursor.position().unwrap_or_default())
-                        })
-                        .map_or(event::Status::Ignored, |on_close| {
-                            shell.publish(on_close);
-                            event::Status::Captured
-                        }),
-                    _ => event::Status::Ignored,
+                        | Event::Touch(touch::Event::FingerPressed { .. })
+                ) {
+                    if let Some(on_close) = self.on_close.clone() {
+                        shell.publish(on_close);
+                    }
                 }
-            });
+            }
+        }
 
         let body_layout = children
             .next()
             .expect("widget: Layout should have a body layout");
         let mut body_children = body_layout.children();
-        let body_status = self.body.as_widget_mut().on_event(
+        self.body.as_widget_mut().update(
             &mut state.children[1],
-            event.clone(),
+            event,
             body_children
                 .next()
                 .expect("widget: Layout should have a body content layout"),
@@ -382,8 +383,8 @@ where
             .next()
             .expect("widget: Layout should have a foot layout");
         let mut foot_children = foot_layout.children();
-        let foot_status = self.foot.as_mut().map_or(event::Status::Ignored, |foot| {
-            foot.as_widget_mut().on_event(
+        if let Some(foot) = self.foot.as_mut() {
+            foot.as_widget_mut().update(
                 &mut state.children[2],
                 event,
                 foot_children
@@ -395,12 +396,16 @@ where
                 shell,
                 viewport,
             )
-        });
+        };
 
-        head_status
-            .merge(close_status)
-            .merge(body_status)
-            .merge(foot_status)
+        if let Event::Window(window::Event::RedrawRequested(_now)) = event {
+            self.last_mouse_interaction = Some(current_interaction);
+        } else if self
+            .last_mouse_interaction
+            .is_some_and(|last_mouse_interaction| last_mouse_interaction != current_interaction)
+        {
+            shell.request_redraw();
+        }
     }
 
     fn mouse_interaction(
@@ -841,8 +846,8 @@ fn draw_head<Message, Theme, Renderer>(
                         + if is_mouse_over_close { 1.0 } else { 0.0 },
                 ),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: LineHeight::Relative(1.3),
                 shaping: iced::advanced::text::Shaping::Advanced,
                 wrapping: Wrapping::default(),

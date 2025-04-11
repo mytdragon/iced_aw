@@ -174,7 +174,7 @@ fn string_to_vertical_align(input: &str) -> Vertical {
 }
 
 fn main() -> iced::Result {
-    iced::application("Grid example", App::update, App::view)
+    iced::application(App::default, App::update, App::view)
         .font(iced_fonts::REQUIRED_FONT_BYTES)
         .run()
 }

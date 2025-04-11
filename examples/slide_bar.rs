@@ -11,7 +11,7 @@ use iced_aw::SlideBar;
 
 fn main() -> iced::Result {
     iced::application(
-        "Slider Bar example",
+        SlideBarExample::default,
         SlideBarExample::update,
         SlideBarExample::view,
     )

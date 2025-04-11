@@ -54,7 +54,7 @@ impl SpinnerExample {
 
 fn main() -> iced::Result {
     iced::application(
-        "Spinner example",
+        SpinnerExample::default,
         SpinnerExample::update,
         SpinnerExample::view,
     )

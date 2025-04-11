@@ -9,7 +9,7 @@ use iced::{
         widget::tree::{self, Tree},
         Clipboard, Layout, Shell, Widget,
     },
-    event,
+    event::{self, Status},
     mouse::{self, Cursor},
     touch, Border, Color, Element, Event, Length, Point, Rectangle, Shadow, Size,
 };
@@ -165,18 +165,18 @@ where
         Node::new(size)
     }
 
-    fn on_event(
+    fn update(
         &mut self,
         tree: &mut Tree,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         _renderer: &Renderer,
         _clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         _viewport: &Rectangle,
-    ) -> event::Status {
-        update(
+    ) {
+        let status = update(
             &event,
             layout,
             cursor,
@@ -187,7 +187,11 @@ where
             self.step,
             self.on_change.as_ref(),
             &self.on_release,
-        )
+        );
+
+        if matches!(status, Status::Captured) {
+            shell.capture_event();
+        }
     }
 
     fn draw(

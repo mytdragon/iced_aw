@@ -550,17 +550,18 @@ where
         node
     }
 
-    fn on_event(
+    fn update(
         &mut self,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
-    ) -> event::Status {
+    ) {
         if event::Status::Captured == self.on_event_keyboard(&event) {
-            return event::Status::Captured;
+            shell.capture_event();
+            return
         }
 
         let mut children = layout.children();
@@ -574,7 +575,9 @@ where
         let month_year_layout = date_children
             .next()
             .expect("widget: Layout should have a month/year layout");
-        let month_year_status = self.on_event_month_year(&event, month_year_layout, cursor);
+        if event::Status::Captured == self.on_event_month_year(&event, month_year_layout, cursor) {
+            shell.capture_event();
+        }
 
         // ----------- Days ----------------------
         let days_layout = date_children
@@ -583,16 +586,18 @@ where
             .children()
             .next()
             .expect("widget: Layout should have a days table layout");
-        let days_status = self.on_event_days(&event, days_layout, cursor);
+        if event::Status::Captured == self.on_event_days(&event, days_layout, cursor) {
+            shell.capture_event();
+        }
 
         // ----------- Buttons ------------------------
         let cancel_button_layout = children
             .next()
             .expect("widget: Layout should have a cancel button layout for a DatePicker");
 
-        let cancel_status = self.cancel_button.on_event(
+        self.cancel_button.update(
             &mut self.tree.children[0],
-            event.clone(),
+            event,
             cancel_button_layout,
             cursor,
             renderer,
@@ -607,7 +612,7 @@ where
 
         let mut fake_messages: Vec<Message> = Vec::new();
 
-        let submit_status = self.submit_button.on_event(
+        self.submit_button.update(
             &mut self.tree.children[1],
             event,
             submit_button_layout,
@@ -621,11 +626,6 @@ where
         if !fake_messages.is_empty() {
             shell.publish((self.on_submit)(self.state.date.into()));
         }
-
-        month_year_status
-            .merge(days_status)
-            .merge(cancel_status)
-            .merge(submit_status)
     }
 
     fn mouse_interaction(
@@ -1171,8 +1171,8 @@ fn month_year(
                 bounds: Size::new(left_bounds.width, left_bounds.height),
                 size: Pixels(font_size.0 + if left_arrow_hovered { 1.0 } else { 0.0 }),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
@@ -1192,8 +1192,8 @@ fn month_year(
                 bounds: Size::new(center_bounds.width, center_bounds.height),
                 size: font_size,
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1213,8 +1213,8 @@ fn month_year(
                 bounds: Size::new(right_bounds.width, right_bounds.height),
                 size: Pixels(font_size.0 + if right_arrow_hovered { 1.0 } else { 0.0 }),
                 font: REQUIRED_FONT,
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
@@ -1283,8 +1283,8 @@ fn day_labels(
                 bounds: Size::new(bounds.width, bounds.height),
                 size: font_size,
                 font: renderer.default_font(),
-                horizontal_alignment: Horizontal::Center,
-                vertical_alignment: Vertical::Center,
+                align_x: text::Alignment::Center,
+                align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
@@ -1376,8 +1376,8 @@ fn day_table(
                     bounds: Size::new(bounds.width, bounds.height),
                     size: font_size,
                     font: renderer.default_font(),
-                    horizontal_alignment: Horizontal::Center,
-                    vertical_alignment: Vertical::Center,
+                    align_x: text::Alignment::Center,
+                    align_y: Vertical::Center,
                     line_height: text::LineHeight::Relative(1.3),
                     shaping: text::Shaping::Basic,
                     wrapping: Wrapping::default(),

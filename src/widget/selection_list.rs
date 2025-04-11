@@ -13,8 +13,7 @@ use iced::{
         widget::{tree, Tree},
         Clipboard, Layout, Shell, Widget,
     },
-    alignment::{Horizontal, Vertical},
-    event,
+    alignment::Vertical,
     mouse::{self, Cursor},
     widget::{
         container, scrollable,
@@ -226,8 +225,8 @@ where
                         line_height: LineHeight::default(),
                         bounds: Size::INFINITY,
                         font: self.font,
-                        horizontal_alignment: Horizontal::Left,
-                        vertical_alignment: Vertical::Top,
+                        align_x: text::Alignment::Center,
+                        align_y: Vertical::Center,
                         shaping: text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
                     };
@@ -249,18 +248,18 @@ where
         Node::with_children(size, vec![content])
     }
 
-    fn on_event(
+    fn update(
         &mut self,
         state: &mut Tree,
-        event: Event,
+        event: &Event,
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
         clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
-    ) -> event::Status {
-        self.container.on_event(
+    ) {
+        self.container.update(
             &mut state.children[0],
             event,
             layout
@@ -272,7 +271,7 @@ where
             clipboard,
             shell,
             viewport,
-        )
+        );
     }
 
     fn mouse_interaction(

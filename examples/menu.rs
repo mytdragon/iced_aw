@@ -16,7 +16,8 @@ use iced_fonts::required::{icon_to_string, RequiredIcons};
 use iced_fonts::REQUIRED_FONT;
 
 pub fn main() -> iced::Result {
-    iced::application(App::title, App::update, App::view)
+    iced::application(App::default, App::update, App::view)
+        .title(App::title)
         .theme(App::theme)
         .font(iced_fonts::REQUIRED_FONT_BYTES)
         .window_size(Size::new(1000.0, 600.0))

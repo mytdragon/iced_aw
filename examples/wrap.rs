@@ -12,7 +12,7 @@ use iced_aw::{NumberInput, Wrap};
 use rand::Rng;
 
 fn main() -> iced::Result {
-    iced::application("Wrap example", RandStrings::update, RandStrings::view)
+    iced::application(RandStrings::default, RandStrings::update, RandStrings::view)
         .font(iced_fonts::REQUIRED_FONT_BYTES)
         .run()
 }

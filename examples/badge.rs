@@ -9,10 +9,10 @@ use iced::{
 
 use iced_aw::{helpers::badge, style, style::status::Status};
 
-const BADGE_TEXT_SIZE: u16 = 15;
+const BADGE_TEXT_SIZE: f32 = 15.0;
 
 fn main() -> iced::Result {
-    iced::application("Badge example", BadgeExample::update, BadgeExample::view).run()
+    iced::application(BadgeExample::default, BadgeExample::update, BadgeExample::view).title("Badge example").run()
 }
 
 #[derive(Debug, Clone)]

@@ -10,7 +10,7 @@ use iced::{
 use iced_aw::{helpers::card, style};
 
 fn main() -> iced::Result {
-    iced::application("Card example", CardExample::update, CardExample::view)
+    iced::application(CardExample::default, CardExample::update, CardExample::view)
         .font(iced_fonts::REQUIRED_FONT_BYTES)
         .run()
 }

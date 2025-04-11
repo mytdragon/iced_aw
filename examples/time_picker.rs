@@ -10,7 +10,7 @@ use iced_aw::{time_picker::Time, TimePicker};
 
 fn main() -> iced::Result {
     iced::application(
-        "TimePicker example",
+        TimePickerExample::default,
         TimePickerExample::update,
         TimePickerExample::view,
     )
