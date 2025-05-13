@@ -35,6 +35,7 @@ where
     pub(super) draw_path: &'b DrawPath,
     pub(super) scroll_speed: ScrollSpeed,
     pub(super) class: &'b Theme::Class<'a>,
+    pub(super) viewport: Rectangle,
 }
 impl<'b, Message, Theme, Renderer> MenuBarOverlay<'_, 'b, Message, Theme, Renderer>
 where
@@ -349,7 +350,6 @@ where
         &self,
         layout: Layout<'_>,
         cursor: mouse::Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
         let bar = self.tree.state.downcast_ref::<MenuBarState>();
@@ -413,7 +413,7 @@ where
             &mut menu_layouts,
             cursor,
             renderer,
-            viewport,
+            &self.viewport,
         )
     }
 
@@ -479,25 +479,27 @@ where
         );
     }
 
-    fn overlay<'c>(
-        &'c mut self,
-        layout: Layout<'_>,
-        renderer: &Renderer,
-    ) -> Option<overlay::Element<'c, Message, Theme, Renderer>> {
-        let bar = self.tree.state.downcast_ref::<MenuBarState>();
-        let active = bar.active_root?;
-        let mut lc = layout.children();
-        let _bar_bounds = lc.next()?.bounds();
-        let _roots_layout = lc.next()?;
-        let menu_layouts_layout = lc.next()?; // Node{0, [menu_node...]}
-        let mut menu_layouts = menu_layouts_layout.children(); // [menu_node...]
-        let active_root = &mut self.roots[active];
-        let active_tree = &mut self.tree.children[active];
-        let menu = active_root.menu.as_mut()?;
-        let menu_tree = &mut active_tree.children[1];
-        let menu_layout = menu_layouts.next()?;
+    fn overlay<'a>(
+        &'a mut self,
+        _layout: Layout<'_>,
+        _renderer: &Renderer,
+    ) -> Option<overlay::Element<'a, Message, Theme, Renderer>> {
+        // TODO: no clue how to fix that lifecycle :/
+        todo!()
+        // let bar = self.tree.state.downcast_ref::<MenuBarState>();
+        // let active = bar.active_root?;
+        // let mut lc = layout.children();
+        // let _bar_bounds = lc.next()?.bounds();
+        // let _roots_layout = lc.next()?;
+        // let menu_layouts_layout = lc.next()?; // Node{0, [menu_node...]}
+        // let mut menu_layouts = menu_layouts_layout.children(); // [menu_node...]
+        // let active_root = &mut self.roots[active];
+        // let active_tree = &mut self.tree.children[active];
+        // let menu = active_root.menu.as_mut()?;
+        // let menu_tree = &mut active_tree.children[1];
+        // let menu_layout = menu_layouts.next()?;
 
-        menu.overlay(menu_tree, menu_layout, renderer, Vector::ZERO)
+        // menu.overlay(menu_tree, menu_layout, renderer, &self.viewport, Vector::ZERO)
     }
 
     fn draw(
@@ -594,27 +596,5 @@ where
             &theme_style,
             &viewport,
         );
-    }
-
-    fn is_over(&self, layout: Layout<'_>, _renderer: &Renderer, cursor_position: Point) -> bool {
-        let mut lc = layout.children();
-        let _bar_bounds = lc.next().unwrap().bounds();
-        let _roots_layout = lc.next().unwrap();
-        let Some(menu_layouts) = lc.next().map(Layout::children) else {
-            return false;
-        }; // [menu_node...]
-
-        for menu_layout in menu_layouts {
-            // menu_node: Node{inf, [ slice_node, prescroll, offset_bounds, check_bounds ]}
-            let mut mc = menu_layout.children();
-            let _slice_layout = mc.next().unwrap();
-            let prescroll = mc.next().unwrap().bounds();
-
-            if prescroll.contains(cursor_position) {
-                return true;
-            }
-        }
-
-        false
     }
 }

@@ -30,6 +30,8 @@ where
 {
     // The position of the element
     position: Point,
+    // The viewport of the element
+    viewport: Rectangle,
     /// The state of the [`ContextMenuOverlay`].
     tree: &'a mut Tree,
     /// The content of the [`ContextMenuOverlay`].
@@ -50,6 +52,7 @@ where
     /// Creates a new [`ContextMenuOverlay`].
     pub(crate) fn new<C>(
         position: Point,
+        viewport: Rectangle,
         tree: &'a mut Tree,
         content: C,
         class: &'a <Theme as Catalog>::Class<'b>,
@@ -60,6 +63,7 @@ where
     {
         ContextMenuOverlay {
             position,
+            viewport,
             tree,
             content: content.into(),
             class,
@@ -219,7 +223,6 @@ where
         &self,
         layout: Layout<'_>,
         cursor: Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
         self.content.as_widget().mouse_interaction(
@@ -229,7 +232,7 @@ where
                 .next()
                 .expect("widget: Layout should have a content layout."),
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         )
     }

@@ -75,6 +75,8 @@ where
     on_submit: &'a dyn Fn(Date) -> Message,
     /// The position of the [`DatePickerOverlay`].
     position: Point,
+    /// The viewport of the [`DatePickerOverlay`].
+    viewport: Rectangle,
     /// The style of the [`DatePickerOverlay`].
     class: &'a <Theme as crate::style::date_picker::Catalog>::Class<'b>,
     /// The reference to the tree holding the state of this overlay.
@@ -99,6 +101,7 @@ where
         on_cancel: Message,
         on_submit: &'a dyn Fn(Date) -> Message,
         position: Point,
+        viewport: Rectangle,
         class: &'a <Theme as crate::style::date_picker::Catalog>::Class<'b>,
         tree: &'a mut Tree,
         //button_style: impl Clone +  Into<<Renderer as button::Renderer>::Style>, // clone not satisfied
@@ -128,6 +131,7 @@ where
             .on_press(on_cancel), // Sending a fake message
             on_submit,
             position,
+            viewport,
             class,
             tree,
             font_size,
@@ -632,7 +636,6 @@ where
         &self,
         layout: Layout<'_>,
         cursor: Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
         let mouse_interaction = mouse::Interaction::default();
@@ -716,7 +719,7 @@ where
             &self.tree.children[0],
             cancel_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 
@@ -728,7 +731,7 @@ where
             &self.tree.children[1],
             submit_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 

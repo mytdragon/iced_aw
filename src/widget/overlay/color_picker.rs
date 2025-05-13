@@ -70,6 +70,8 @@ where
     on_submit: &'a dyn Fn(Color) -> Message,
     /// The position of the [`ColorPickerOverlay`].
     position: Point,
+    /// The viewport of the [`ColorPickerOverlay`].
+    viewport: Rectangle,
     /// The style of the [`ColorPickerOverlay`].
     class: &'a <Theme as style::color_picker::Catalog>::Class<'b>,
     /// The reference to the tree holding the state of this overlay.
@@ -91,6 +93,7 @@ where
         on_cancel: Message,
         on_submit: &'a dyn Fn(Color) -> Message,
         position: Point,
+        viewport: Rectangle,
         class: &'a <Theme as style::color_picker::Catalog>::Class<'b>,
         tree: &'a mut Tree,
     ) -> Self {
@@ -117,6 +120,7 @@ where
             .on_press(on_cancel), // Sending a fake message
             on_submit,
             position,
+            viewport,
             class,
             tree,
         }
@@ -702,7 +706,6 @@ where
         &self,
         layout: Layout<'_>,
         cursor: Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
         let mut children = layout.children();
@@ -782,7 +785,7 @@ where
             &self.tree.children[1],
             cancel_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 
@@ -793,7 +796,7 @@ where
             &self.tree.children[1],
             submit_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 

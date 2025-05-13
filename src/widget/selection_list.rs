@@ -231,7 +231,7 @@ where
                         wrapping: Wrapping::default(),
                     };
 
-                    state.values[id].update(text);
+                    let _ = state.values[id].update(text);
                     (state.values[id].min_bounds().width + self.padding.horizontal()).round() as u32
                 })
                 .max()

@@ -88,6 +88,8 @@ where
     on_submit: &'a dyn Fn(Time) -> Message,
     /// The position of the [`TimePickerOverlay`].
     position: Point,
+    /// The viewport of the [`TimePickerOverlay`].
+    viewport: Rectangle,
     /// The style of the [`TimePickerOverlay`].
     class: &'a <Theme as Catalog>::Class<'b>,
     /// The reference to the tree holding the state of this overlay.
@@ -106,6 +108,7 @@ where
         on_cancel: Message,
         on_submit: &'a dyn Fn(Time) -> Message,
         position: Point,
+        viewport: Rectangle,
         class: &'a <Theme as Catalog>::Class<'b>,
         tree: &'a mut Tree,
     ) -> Self {
@@ -131,6 +134,7 @@ where
             .on_press(on_cancel), // Sending a fake message
             on_submit,
             position,
+            viewport,
             class,
             tree,
         }
@@ -708,7 +712,6 @@ where
         &self,
         layout: Layout<'_>,
         cursor: Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
         let mut children = layout.children();
@@ -797,7 +800,7 @@ where
             &self.tree.children[0],
             cancel_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 
@@ -809,7 +812,7 @@ where
             &self.tree.children[1],
             submit_button_layout,
             cursor,
-            viewport,
+            &self.viewport,
             renderer,
         );
 
@@ -1244,10 +1247,11 @@ fn draw_clock<Message, Theme>(
                     .clock_number_color,
                 size: Pixels(period_size),
                 font: renderer.default_font(),
-                align_x: Horizontal::Center,
+                align_x: text::Alignment::Center,
                 align_y: Vertical::Center,
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
+                max_width: f32::INFINITY,
             };
             frame.fill_text(period_text);
 
@@ -1289,10 +1293,11 @@ fn draw_clock<Message, Theme>(
                         .clock_number_color,
                     size: Pixels(number_size),
                     font: renderer.default_font(),
-                    align_x: Horizontal::Center,
+                    align_x: text::Alignment::Center,
                     align_y: Vertical::Center,
                     shaping: text::Shaping::Basic,
                     line_height: text::LineHeight::Relative(1.3),
+                    max_width: f32::INFINITY,
                 };
 
                 frame.fill_text(text);
@@ -1324,10 +1329,11 @@ fn draw_clock<Message, Theme>(
                             .clock_number_color,
                         size: Pixels(number_size),
                         font: renderer.default_font(),
-                        align_x: Horizontal::Center,
+                        align_x: text::Alignment::Center,
                         align_y: Vertical::Center,
                         shaping: text::Shaping::Basic,
                         line_height: text::LineHeight::Relative(1.3),
+                        max_width: f32::INFINITY,
                     };
 
                     frame.fill_text(text);
@@ -1370,10 +1376,11 @@ fn draw_clock<Message, Theme>(
                                 .clock_number_color,
                             size: Pixels(number_size),
                             font: renderer.default_font(),
-                            align_x: Horizontal::Center,
+                            align_x: text::Alignment::Center,
                             align_y: Vertical::Center,
                             shaping: text::Shaping::Basic,
                             line_height: text::LineHeight::Relative(1.3),
+                            max_width: f32::INFINITY,
                         };
 
                         frame.fill_text(text);

@@ -4,14 +4,14 @@
 
 use iced::{
     advanced::{
-        debug::core::window,
         layout::{Limits, Node},
         renderer,
         widget::Tree,
         Clipboard, Layout, Shell, Widget,
     },
     mouse::{self, Cursor},
-    Alignment, Border, Color, Element, Event, Length, Padding, Point, Rectangle, Shadow, Size,
+    window, Alignment, Border, Color, Element, Event, Length, Padding, Point, Rectangle, Shadow,
+    Size,
 };
 
 pub use crate::style::{

@@ -263,8 +263,9 @@ where
     fn overlay<'b>(
         &'b mut self,
         state: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
         let picker_state: &mut State = state.state.downcast_mut();
@@ -274,6 +275,7 @@ where
                 &mut state.children[0],
                 layout,
                 renderer,
+                viewport,
                 translation,
             );
         }
@@ -287,6 +289,7 @@ where
                 self.on_cancel.clone(),
                 &self.on_submit,
                 position,
+                *viewport,
                 &self.class,
                 &mut state.children[1],
             )

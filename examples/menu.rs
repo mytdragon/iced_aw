@@ -1,5 +1,7 @@
 // This example demonstrates how to use the menu widget
 
+use std::borrow::Cow;
+
 use iced::border::Radius;
 use iced::widget::{
     button, checkbox, container, horizontal_space, row, scrollable, slider, text, text_input,
@@ -49,7 +51,7 @@ struct App {
 impl Default for App {
     fn default() -> Self {
         let theme = iced::Theme::custom(
-            "Custom Theme".into(),
+            Cow::from("Custom Theme"),
             theme::Palette {
                 primary: Color::from([0.45, 0.25, 0.57]),
                 ..iced::Theme::Light.palette()
@@ -92,7 +94,7 @@ impl App {
             }
             Message::ColorChange(c) => {
                 self.theme = iced::Theme::custom(
-                    "Color Change".into(),
+                    Cow::from("Color Change"),
                     theme::Palette {
                         primary: c,
                         ..self.theme.palette()
@@ -105,7 +107,7 @@ impl App {
                 let primary = self.theme.palette().primary;
                 if b {
                     self.theme = iced::Theme::custom(
-                        "Dark".into(),
+                        Cow::from("Dark"),
                         theme::Palette {
                             primary,
                             ..iced::Theme::Dark.palette()
@@ -113,7 +115,7 @@ impl App {
                     )
                 } else {
                     self.theme = iced::Theme::custom(
-                        "Light".into(),
+                        Cow::from("Light"),
                         theme::Palette {
                             primary,
                             ..iced::Theme::Light.palette()

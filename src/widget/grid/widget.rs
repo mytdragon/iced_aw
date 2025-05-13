@@ -149,8 +149,9 @@ where
     fn overlay<'b>(
         &'b mut self,
         tree: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
         let children = self
@@ -160,7 +161,7 @@ where
             .filter_map(|((child, state), layout)| {
                 child
                     .as_widget_mut()
-                    .overlay(state, layout, renderer, translation)
+                    .overlay(state, layout, renderer, viewport, translation)
             })
             .collect::<Vec<_>>();
 

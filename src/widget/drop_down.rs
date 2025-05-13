@@ -191,8 +191,9 @@ where
     fn overlay<'b>(
         &'b mut self,
         state: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
         if !self.expanded {
@@ -200,6 +201,7 @@ where
                 &mut state.children[0],
                 layout,
                 renderer,
+                viewport,
                 translation,
             );
         }
@@ -214,6 +216,7 @@ where
             &self.offset,
             layout.bounds(),
             layout.position() + translation,
+            *viewport
         ))))
     }
 }
@@ -242,6 +245,7 @@ where
     offset: &'b Offset,
     underlay_bounds: Rectangle,
     position: Point,
+    viewport: Rectangle,
 }
 
 impl<'a, 'b, Message, Theme, Renderer> DropDownOverlay<'a, 'b, Message, Theme, Renderer>
@@ -260,6 +264,7 @@ where
         offset: &'b Offset,
         underlay_bounds: Rectangle,
         position: Point,
+        viewport: Rectangle,
     ) -> Self {
         DropDownOverlay {
             state,
@@ -271,6 +276,7 @@ where
             offset,
             underlay_bounds,
             position,
+            viewport,
         }
     }
 }
@@ -401,11 +407,14 @@ where
         &self,
         layout: Layout<'_>,
         cursor: Cursor,
-        viewport: &Rectangle,
         renderer: &Renderer,
     ) -> mouse::Interaction {
-        self.element
-            .as_widget()
-            .mouse_interaction(self.state, layout, cursor, viewport, renderer)
+        self.element.as_widget().mouse_interaction(
+            self.state,
+            layout,
+            cursor,
+            &self.viewport,
+            renderer,
+        )
     }
 }

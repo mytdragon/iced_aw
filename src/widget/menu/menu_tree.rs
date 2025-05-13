@@ -331,14 +331,7 @@ where
             .zip(slice_layout.children()) // [item_layout...]
             .for_each(|((item, tree), layout)| {
                 item.update(
-                    tree,
-                    event,
-                    layout,
-                    cursor,
-                    renderer,
-                    clipboard,
-                    shell,
-                    viewport,
+                    tree, event, layout, cursor, renderer, clipboard, shell, viewport,
                 );
             });
 
@@ -404,8 +397,9 @@ where
     pub(super) fn overlay<'b>(
         &'b mut self,
         tree: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
         let mut lc = layout.children();
@@ -422,7 +416,7 @@ where
             .zip(tree.children[slice.start_index..=slice.end_index].iter_mut()) // [item_tree...]
             .zip(slice_layout.children())
             .filter_map(|((child, state), layout)| {
-                child.overlay(state, layout, renderer, translation)
+                child.overlay(state, layout, renderer, viewport, translation)
             })
             .collect::<Vec<_>>();
 
@@ -832,13 +826,18 @@ where
     pub(super) fn overlay<'b>(
         &'b mut self,
         tree: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
-        self.item
-            .as_widget_mut()
-            .overlay(&mut tree.children[0], layout, renderer, translation)
+        self.item.as_widget_mut().overlay(
+            &mut tree.children[0],
+            layout,
+            renderer,
+            viewport,
+            translation,
+        )
     }
 }
 

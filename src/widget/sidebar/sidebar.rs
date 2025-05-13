@@ -1453,8 +1453,9 @@ where
     fn overlay<'b>(
         &'b mut self,
         state: &'b mut Tree,
-        layout: Layout<'_>,
+        layout: Layout<'b>,
         renderer: &Renderer,
+        viewport: &Rectangle,
         translation: Vector,
     ) -> Option<overlay::Element<'b, Message, Theme, Renderer>> {
         let layout = match self.sidebar_position {
@@ -1471,6 +1472,7 @@ where
                         &mut state.children[1].children[idx],
                         layout,
                         renderer,
+                        viewport,
                         translation,
                     )
                 })
