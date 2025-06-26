@@ -132,6 +132,7 @@ where
                         color: Color::TRANSPARENT,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet.background,
             );

@@ -299,6 +299,7 @@ where
                 bounds: pad_rectangle(layout.bounds(), styling.bar_background_expand),
                 border: styling.bar_border,
                 shadow: styling.bar_shadow,
+                ..renderer::Quad::default()
             },
             styling.bar_background,
         );

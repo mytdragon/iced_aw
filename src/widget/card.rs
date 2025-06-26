@@ -536,6 +536,7 @@ where
                         color: style_sheet.border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet.background,
             );
@@ -551,6 +552,7 @@ where
                         color: style_sheet.border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -793,6 +795,7 @@ fn draw_head<Message, Theme, Renderer>(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             style.head_background,
         );
@@ -815,6 +818,7 @@ fn draw_head<Message, Theme, Renderer>(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             style.head_background,
         );
@@ -889,6 +893,7 @@ fn draw_body<Message, Theme, Renderer>(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             style.body_background,
         );
@@ -938,6 +943,7 @@ fn draw_foot<Message, Theme, Renderer>(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             style.foot_background,
         );

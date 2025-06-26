@@ -854,6 +854,7 @@ where
                         color: style_sheet[&style_state].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet[&style_state].background,
             );
@@ -1175,6 +1176,7 @@ fn block2<Message, Theme>(
                         color: style_sheet[&StyleState::Focused].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -1193,6 +1195,7 @@ fn block2<Message, Theme>(
                         color: style_sheet[&StyleState::Focused].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -1469,6 +1472,7 @@ fn rgba_color(
                         color: Color::TRANSPARENT,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 color,
             );
@@ -1495,6 +1499,7 @@ fn rgba_color(
                             .bar_border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -1542,6 +1547,7 @@ fn rgba_color(
                             .border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -1638,6 +1644,7 @@ fn hex_text(
                     color: style_sheet[&hex_text_style_state].bar_border_color,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             *color,
         );

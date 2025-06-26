@@ -1062,6 +1062,7 @@ where
                         color: Color::TRANSPARENT,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 decrease_btn_style
                     .button_background
@@ -1097,6 +1098,7 @@ where
                         color: Color::TRANSPARENT,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 increase_btn_style
                     .button_background

@@ -231,6 +231,7 @@ where
                             color: Color::TRANSPARENT,
                         },
                         shadow: Shadow::default(),
+                        ..renderer::Quad::default()
                     },
                     if is_selected {
                         theme

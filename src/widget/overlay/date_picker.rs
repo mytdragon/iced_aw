@@ -795,6 +795,7 @@ where
                         color: style_sheet[&style_state].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet[&style_state].background,
             );
@@ -877,6 +878,7 @@ where
                         color: style_sheet[&StyleState::Focused].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -896,6 +898,7 @@ where
                         color: style_sheet[&StyleState::Focused].border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 Color::TRANSPARENT,
             );
@@ -1159,6 +1162,7 @@ fn month_year(
                             .border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style
                     .get(&style_state)
@@ -1340,6 +1344,7 @@ fn day_table(
                             color: Color::TRANSPARENT,
                         },
                         shadow: Shadow::default(),
+                        ..renderer::Quad::default()
                     },
                     style
                         .get(&style_state)
@@ -1367,6 +1372,7 @@ fn day_table(
                                     .border_color,
                             },
                             shadow: Shadow::default(),
+                            ..renderer::Quad::default()
                         },
                         Color::TRANSPARENT,
                     );

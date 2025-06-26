@@ -70,9 +70,7 @@ web-time = "1.1.0"
 
 [dependencies.iced]
 git = "https://github.com/iced-rs/iced.git"
-rev = "e6da449"
-# rev = "b474a2b7a763dcde6a377cb409001a7b5285ee8d"
-# version = "0.13.1"
+rev = "c952ea8"
 default-features = false
 features = ["advanced"]
 
@@ -86,15 +84,12 @@ getrandom = { version = "0.3.1", features = ["wasm_js"]}
 
 [dev-dependencies.iced]
 git = "https://github.com/iced-rs/iced.git"
-rev = "e6da449"
-#rev = "b474a2b7a763dcde6a377cb409001a7b5285ee8d"
-# version = "0.13.0"
-#default-features = false
+rev = "c952ea8"
 features = ["advanced", "wgpu"]
 
 [patch.crates-io]
-iced_core = { git = "https://github.com/iced-rs/iced.git", rev = "e6da449" }
-iced_widget = { git = "https://github.com/iced-rs/iced.git", rev = "e6da449" }
+iced_core = { git = "https://github.com/iced-rs/iced.git", rev = "c952ea8" }
+iced_widget = { git = "https://github.com/iced-rs/iced.git", rev = "c952ea8" }
 
 [dev-dependencies.iced_aw]
 path = "./"

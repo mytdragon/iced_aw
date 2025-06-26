@@ -97,6 +97,7 @@ fn fill_circle(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             color,
         );

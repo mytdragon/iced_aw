@@ -618,6 +618,7 @@ where
                         color: style_sheet.border_color.unwrap_or(Color::TRANSPARENT),
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet
                     .background
@@ -818,6 +819,7 @@ fn draw_tab<Theme, Renderer>(
                         color: style.border_color.unwrap_or(Color::TRANSPARENT),
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style
                     .icon_background
@@ -845,6 +847,7 @@ fn draw_tab<Theme, Renderer>(
                     color: style.tab_label_border_color,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             style.tab_label_background,
         );

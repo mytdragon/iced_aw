@@ -337,6 +337,7 @@ pub fn draw<T, R, Message>(
                     color: slider.border_color,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             background,
         );
@@ -352,6 +353,7 @@ pub fn draw<T, R, Message>(
                     color: Color::TRANSPARENT,
                 },
                 shadow: Shadow::default(),
+                ..renderer::Quad::default()
             },
             slider.color,
         );

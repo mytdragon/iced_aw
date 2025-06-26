@@ -487,6 +487,7 @@ where
                     bounds: pad_rectangle,
                     border: theme_style.menu_border,
                     shadow: theme_style.menu_shadow,
+                    ..renderer::Quad::default()
                 },
                 theme_style.menu_background,
             );

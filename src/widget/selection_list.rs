@@ -309,6 +309,7 @@ where
                         color: style_sheet.border_color,
                     },
                     shadow: Shadow::default(),
+                    ..renderer::Quad::default()
                 },
                 style_sheet.background,
             );
