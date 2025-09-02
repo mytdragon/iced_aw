@@ -86,9 +86,9 @@ num-traits = { version = "0.2.19", optional = true }
 web-time = "1.1.0"
 
 [patch.crates-io]
-iced = { git = "https://github.com/iced-rs/iced.git", rev = "6be7072" }
-iced_core = { git = "https://github.com/iced-rs/iced.git", rev = "6be7072" }
-iced_widget = { git = "https://github.com/iced-rs/iced.git", rev = "6be7072" }
+iced = { git = "https://github.com/iced-rs/iced.git", rev = "ad0e4c5" }
+iced_core = { git = "https://github.com/iced-rs/iced.git", rev = "ad0e4c5" }
+iced_widget = { git = "https://github.com/iced-rs/iced.git", rev = "ad0e4c5" }
 
 [[example]]
 name = "badge"

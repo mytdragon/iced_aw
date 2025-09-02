@@ -1,13 +1,11 @@
-use iced::{
-    advanced::{
-        layout::{Limits, Node},
-        overlay::Group,
-        renderer,
-        renderer::Style,
-        widget::{Operation, Tree},
-        Clipboard, Layout, Shell, Widget,
-    },
-    mouse, overlay, Element, Event, Length, Rectangle, Size, Vector,
+use iced_core::{
+    layout::{Limits, Node},
+    mouse, overlay,
+    overlay::Group,
+    renderer,
+    renderer::Style,
+    widget::{Operation, Tree},
+    Clipboard, Element, Event, Layout, Length, Rectangle, Shell, Size, Vector, Widget,
 };
 
 use super::{layout::layout, types::Grid};
@@ -83,8 +81,8 @@ where
         self.elements_iter().map(Tree::new).collect()
     }
 
-    fn diff(&mut self, tree: &mut Tree) {
-        tree.diff_children(&mut self.elements_iter_mut().collect::<Vec<_>>());
+    fn diff(&self, tree: &mut Tree) {
+        tree.diff_children(&mut self.elements_iter().collect::<Vec<_>>());
     }
 
     fn operate(

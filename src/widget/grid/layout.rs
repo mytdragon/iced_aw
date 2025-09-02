@@ -1,12 +1,10 @@
 use std::cmp::Ordering;
 
-use iced::{
-    advanced::{
-        layout::{Limits, Node},
-        renderer,
-        widget::Tree,
-    },
+use iced_core::{
     alignment::{Horizontal, Vertical},
+    layout::{Limits, Node},
+    renderer,
+    widget::Tree,
     Length, Padding, Pixels, Point, Size,
 };
 use itertools::{Itertools, Position};

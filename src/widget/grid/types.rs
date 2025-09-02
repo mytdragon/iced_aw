@@ -1,14 +1,13 @@
-use iced::{
-    advanced::renderer,
+use iced_core::{
     alignment::{Horizontal, Vertical},
-    Element, Length, Padding, Pixels,
+    renderer, Element, Length, Padding, Pixels,
 };
 
 /// A container that distributes its contents in a grid of rows and columns.
 ///
 /// The number of columns is determined by the row with the most elements.
 #[allow(missing_debug_implementations)]
-pub struct Grid<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
+pub struct Grid<'a, Message, Theme = iced_widget::Theme, Renderer = iced_widget::Renderer> {
     pub(super) rows: Vec<GridRow<'a, Message, Theme, Renderer>>,
     pub(super) horizontal_alignment: Horizontal,
     pub(super) vertical_alignment: Vertical,
@@ -212,7 +211,7 @@ where
 
 /// A container that distributes its contents in a row of a [`crate::Grid`].
 #[allow(missing_debug_implementations)]
-pub struct GridRow<'a, Message, Theme = iced::Theme, Renderer = iced::Renderer> {
+pub struct GridRow<'a, Message, Theme = iced_widget::Theme, Renderer = iced_widget::Renderer> {
     pub(crate) elements: Vec<Element<'a, Message, Theme, Renderer>>,
 }
 
