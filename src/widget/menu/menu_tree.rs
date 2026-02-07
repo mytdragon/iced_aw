@@ -13,7 +13,7 @@
 use super::common::*;
 use super::flex;
 use iced_core::{
-    Clipboard, Element, Event, Length, Padding, Pixels, Point, Rectangle, Shell, Size, Vector,
+    Element, Event, Length, Padding, Pixels, Point, Rectangle, Shell, Size, Vector,
     alignment,
     layout::{Layout, Limits, Node},
     mouse, renderer,
@@ -381,7 +381,6 @@ where
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
         parent_bounds: Rectangle,
@@ -423,9 +422,7 @@ where
                         slice_layout.children()
                     )
                     .for_each(|((item, tree), layout)| {
-                        item.update(
-                            tree, event, layout, cursor, renderer, clipboard, shell, viewport,
-                        );
+                        item.update(tree, event, layout, cursor, renderer, shell, viewport);
                     });
                 }
                 Op::RedrawUpdate => {
@@ -469,7 +466,6 @@ where
                             layout,
                             cursor,
                             renderer,
-                            clipboard,
                             &mut temp_shell,
                             viewport,
                         );
@@ -832,7 +828,6 @@ where
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -844,7 +839,6 @@ where
             layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         )

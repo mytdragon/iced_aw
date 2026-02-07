@@ -13,8 +13,8 @@ use crate::{
 };
 use chrono::{Datelike, Local, NaiveDate};
 use iced_core::{
-    Alignment, Border, Clipboard, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels,
-    Point, Rectangle, Renderer as _, Shadow, Shell, Size, Widget,
+    Alignment, Border, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels, Point,
+    Rectangle, Renderer as _, Shadow, Shell, Size, Widget,
     alignment::{Horizontal, Vertical},
     event, keyboard,
     layout::{Limits, Node},
@@ -585,7 +585,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
     ) {
         if event::Status::Captured == self.on_event_keyboard(event) {
@@ -631,7 +630,6 @@ where
             cancel_button_layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             &layout.bounds(),
         );
@@ -652,7 +650,6 @@ where
             submit_button_layout,
             cursor,
             renderer,
-            clipboard,
             &mut Shell::new(&mut fake_messages),
             &layout.bounds(),
         );
@@ -1349,6 +1346,7 @@ fn month_year(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(left_bounds.center_x(), left_bounds.center_y()),
             style
@@ -1370,6 +1368,7 @@ fn month_year(
                 wrapping: Wrapping::default(),
                 align_x: text::Alignment::Center,
                 align_y: Vertical::Center,
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(center_bounds.center_x(), center_bounds.center_y()),
             style
@@ -1391,6 +1390,7 @@ fn month_year(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(right_bounds.center_x(), right_bounds.center_y()),
             style
@@ -1461,6 +1461,7 @@ fn day_labels(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(bounds.center_x(), bounds.center_y()),
             style
@@ -1559,6 +1560,7 @@ fn day_table(
                     line_height: text::LineHeight::Relative(1.3),
                     shaping: text::Shaping::Basic,
                     wrapping: Wrapping::default(),
+                    hint_factor: renderer.scale_factor(),
                 },
                 Point::new(bounds.center_x(), bounds.center_y()),
                 if is_in_month == IsInMonth::Same {

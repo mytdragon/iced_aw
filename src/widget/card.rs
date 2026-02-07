@@ -8,7 +8,7 @@ pub use crate::style::{
     status::{Status, StyleFn},
 };
 use iced_core::{
-    Alignment, Border, Clipboard, Color, Element, Event, Layout, Length, Padding, Point, Rectangle,
+    Alignment, Border, Color, Element, Event, Layout, Length, Padding, Point, Rectangle,
     Shadow, Shell, Size, Vector, Widget,
     layout::{Limits, Node},
     mouse::{self, Cursor},
@@ -371,7 +371,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
     ) {
@@ -389,7 +388,6 @@ where
                 .expect("widget: Layout should have a head content layout"),
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );
@@ -405,7 +403,6 @@ where
                 close_layout,
                 cursor,
                 renderer,
-                clipboard,
                 shell,
                 viewport,
             );
@@ -424,7 +421,6 @@ where
                 .expect("widget: Layout should have a body content layout"),
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );
@@ -443,7 +439,6 @@ where
                     .expect("widget: Layout should have a foot content layout"),
                 cursor,
                 renderer,
-                clipboard,
                 shell,
                 viewport,
             );

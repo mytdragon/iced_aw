@@ -3,7 +3,7 @@
 //! *This API requires the following crate features to be activated: `drop_down`*
 
 use iced_core::{
-    Clipboard, Element, Event, Layout, Length, Point, Rectangle, Shell, Size, Vector, Widget,
+    Element, Event, Layout, Length, Point, Rectangle, Shell, Size, Vector, Widget,
     keyboard::{self, key::Named},
     layout::{Limits, Node},
     mouse::{self, Cursor},
@@ -152,7 +152,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -162,7 +161,6 @@ where
             layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );
@@ -403,7 +401,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
     ) {
         self.underlay_bounds = Rectangle {
@@ -440,7 +437,6 @@ where
             layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             &layout.bounds(),
         );

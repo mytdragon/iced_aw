@@ -2,10 +2,10 @@
 //!
 //! A [`NumberInput`] has some local [`State`].
 use iced_core::{
-    Alignment, Background, Border, Clipboard, Color, Element, Event, Layout, Length, Padding,
-    Point, Rectangle, Shadow, Shell, Size, Widget,
+    Alignment, Background, Border, Color, Element, Event, Layout, Length, Padding, Point,
+    Rectangle, Shadow, Shell, Size, Widget,
     alignment::Vertical,
-    keyboard,
+    clipboard, keyboard,
     layout::{Limits, Node},
     mouse::{self, Cursor},
     renderer,
@@ -667,7 +667,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
     ) {
@@ -711,14 +710,13 @@ where
         let mut sub_shell = Shell::new(&mut messages);
 
         // Function to forward the event to the underlying [`TypedInput`]
-        let mut forward_to_text = |widget: &mut Self, child, clipboard| {
+        let mut forward_to_text = |widget: &mut Self, child| {
             widget.content.update(
                 child,
                 &event.clone(),
                 content,
                 cursor,
                 renderer,
-                clipboard,
                 &mut sub_shell,
                 viewport,
             );
@@ -744,7 +742,7 @@ where
                 }
 
                 match key {
-                    keyboard::Event::ModifiersChanged(_) => forward_to_text(self, child, clipboard),
+                    keyboard::Event::ModifiersChanged(_) => forward_to_text(self, child),
                     keyboard::Event::KeyReleased { .. } => return,
                     keyboard::Event::KeyPressed {
                         key,
@@ -762,56 +760,60 @@ where
                                 .as_ref()
                                 .is_some_and(|t| t.chars().any(|c| !c.is_control()));
 
+                        // TODO: duno how to do with the new clipboard stuff
+                        // https://github.com/iced-rs/iced/pull/3238
+                        // The copy/cut/paste need to be fixed.
+
                         match key.as_ref() {
                             // Enter
                             keyboard::Key::Named(keyboard::key::Named::Enter) => {
-                                forward_to_text(self, child, clipboard);
+                                forward_to_text(self, child);
                             }
                             // Copy and selecting all
                             keyboard::Key::Character("c" | "a") if modifiers.command() => {
-                                forward_to_text(self, child, clipboard);
+                                forward_to_text(self, child);
                             }
                             // Cut
                             keyboard::Key::Character("x") if modifiers.command() => {
                                 // We need a selection to cut
-                                if let Some((start, end)) = cursor.selection(&Value::new(&value)) {
-                                    let _ = value.drain(start..end);
-                                    // We check that once this part is cut, it's still a number
-                                    if check_value(&value) {
-                                        forward_to_text(self, child, clipboard);
-                                    } else {
-                                        return;
-                                    }
-                                } else {
-                                    return;
-                                }
+                                // if let Some((start, end)) = cursor.selection(&Value::new(&value)) {
+                                //     let _ = value.drain(start..end);
+                                //     // We check that once this part is cut, it's still a number
+                                //     if check_value(&value) {
+                                //         forward_to_text(self, child);
+                                //     } else {
+                                //         return;
+                                //     }
+                                // } else {
+                                //     return;
+                                // }
                             }
                             // Paste
                             keyboard::Key::Character("v") if modifiers.command() => {
                                 // We need something to paste
-                                let Some(paste) =
-                                    clipboard.read(iced_core::clipboard::Kind::Standard)
-                                else {
-                                    return;
-                                };
+                                // let Some(paste) =
+                                //     clipboard.read(iced_core::clipboard::Kind::Standard)
+                                // else {
+                                //     return;
+                                // };
                                 // We replace the selection or paste the text at the cursor
-                                match cursor.state(&Value::new(&value)) {
-                                    cursor::State::Index(idx) => {
-                                        value.insert_str(idx, &paste);
-                                    }
-                                    cursor::State::Selection { start, end } => {
-                                        value.replace_range(sorted_range(start, end), &paste);
-                                    }
-                                }
+                                // match cursor.state(&Value::new(&value)) {
+                                //     cursor::State::Index(idx) => {
+                                //         value.insert_str(idx, &paste);
+                                //     }
+                                //     cursor::State::Selection { start, end } => {
+                                //         value.replace_range(sorted_range(start, end), &paste);
+                                //     }
+                                // }
 
-                                shell.capture_event();
+                                // shell.capture_event();
 
-                                // We check if it's now a valid number
-                                if check_value(&value) {
-                                    forward_to_text(self, child, clipboard);
-                                } else {
-                                    return;
-                                }
+                                // // We check if it's now a valid number
+                                // if check_value(&value) {
+                                //     forward_to_text(self, child);
+                                // } else {
+                                //     return;
+                                // }
                             }
                             // Backspace
                             keyboard::Key::Named(keyboard::key::Named::Backspace) => {
@@ -839,7 +841,7 @@ where
 
                                 // We check if it's now a valid number
                                 if check_value(&value) {
-                                    forward_to_text(self, child, clipboard);
+                                    forward_to_text(self, child);
                                 } else {
                                     return;
                                 }
@@ -871,7 +873,7 @@ where
 
                                 // We check if it's now a valid number
                                 if check_value(&value) {
-                                    forward_to_text(self, child, clipboard);
+                                    forward_to_text(self, child);
                                 } else {
                                     return;
                                 }
@@ -899,7 +901,7 @@ where
                                 | keyboard::key::Named::ArrowRight
                                 | keyboard::key::Named::Home
                                 | keyboard::key::Named::End,
-                            ) if !has_value => forward_to_text(self, child, clipboard),
+                            ) if !has_value => forward_to_text(self, child),
                             // Everything else
                             _ => match text {
                                 // If we are trying to input text
@@ -919,7 +921,7 @@ where
 
                                     // We check if it's now a valid number
                                     if check_value(&value) {
-                                        forward_to_text(self, child, clipboard);
+                                        forward_to_text(self, child);
                                     } else {
                                         return;
                                     }
@@ -974,7 +976,7 @@ where
                 shell.request_redraw();
             }
             // Any other event are just forwarded
-            _ => forward_to_text(self, child, clipboard),
+            _ => forward_to_text(self, child),
         }
 
         // We forward the shell of the [`TypedInput`] to the application
@@ -1154,6 +1156,7 @@ where
                 wrapping: Wrapping::default(),
                 align_x: Alignment::Center.into(),
                 align_y: Vertical::Center,
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(dec_bounds.center_x(), dec_bounds.center_y()),
             decrease_btn_style.icon_color,
@@ -1191,6 +1194,7 @@ where
                 wrapping: Wrapping::default(),
                 align_x: Alignment::Center.into(),
                 align_y: Vertical::Center,
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(inc_bounds.center_x(), inc_bounds.center_y()),
             increase_btn_style.icon_color,

@@ -18,7 +18,7 @@ use crate::{
 };
 
 use iced_core::{
-    Clipboard, Element, Event, Font, Layout, Length, Padding, Pixels, Point, Rectangle, Shell,
+    Element, Event, Font, Layout, Length, Padding, Pixels, Point, Rectangle, Shell,
     Size, Vector, Widget,
     layout::{Limits, Node},
     mouse::{self, Cursor},
@@ -399,7 +399,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -431,7 +430,6 @@ where
             tab_bar_layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );
@@ -443,7 +441,6 @@ where
                 tab_content_layout,
                 cursor,
                 renderer,
-                clipboard,
                 shell,
                 viewport,
             );

@@ -13,8 +13,8 @@ use crate::{
 
 use crate::iced_aw_font::advanced_text::{cancel, ok};
 use iced_core::{
-    Alignment, Border, Clipboard, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels,
-    Point, Rectangle, Renderer as _, Shell, Size, Text, Vector, Widget,
+    Alignment, Border, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels, Point,
+    Rectangle, Renderer as _, Shell, Size, Text, Vector, Widget,
     alignment::{Horizontal, Vertical},
     event, keyboard,
     layout::{Limits, Node},
@@ -642,7 +642,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
     ) {
         if event::Status::Captured == self.on_event_keyboard(event, shell) {
@@ -689,7 +688,6 @@ where
             cancel_button_layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             &layout.bounds(),
         );
@@ -703,7 +701,6 @@ where
             submit_button_layout,
             cursor,
             renderer,
-            clipboard,
             &mut Shell::new(&mut fake_messages),
             &layout.bounds(),
         );
@@ -1487,6 +1484,7 @@ fn rgba_color(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::None,
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(
                 label_layout.bounds().center_x(),
@@ -1571,6 +1569,7 @@ fn rgba_color(
                 line_height: iced_widget::text::LineHeight::Relative(1.3),
                 shaping: iced_widget::text::Shaping::Basic,
                 wrapping: Wrapping::None,
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(
                 value_layout.bounds().center_x(),
@@ -1713,6 +1712,7 @@ fn hex_text(
             line_height: text::LineHeight::Relative(1.3),
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),
+            hint_factor: renderer.scale_factor(),
         },
         Point::new(bounds.center_x(), bounds.center_y()),
         Color {

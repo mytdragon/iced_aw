@@ -6,7 +6,7 @@ use crate::style::{
 };
 
 use iced_core::{
-    Border, Clipboard, Element, Event, Font, Layout, Length, Padding, Pixels, Rectangle, Shell,
+    Border, Element, Event, Font, Layout, Length, Padding, Pixels, Rectangle, Shell,
     Size, Widget,
     alignment::Vertical,
     layout::{Limits, Node},
@@ -231,6 +231,7 @@ where
                         align_y: Vertical::Top,
                         shaping: text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
+                        hint_factor: renderer.scale_factor(),
                     };
 
                     let _ = state.values[id].update(text);
@@ -257,7 +258,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
     ) {
@@ -270,7 +270,6 @@ where
                 .expect("Scrollable Child Missing in Selection List"),
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );

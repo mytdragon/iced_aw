@@ -7,7 +7,7 @@
 //! alignments.
 
 use iced_core::{
-    Alignment, Clipboard, Element, Layout, Length, Padding, Pixels, Point, Rectangle, Shell, Size,
+    Alignment, Element, Layout, Length, Padding, Pixels, Point, Rectangle, Shell, Size,
     Vector, Widget, alignment,
     event::Event,
     layout::{self, Node},
@@ -325,7 +325,6 @@ where
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -336,7 +335,7 @@ where
             .zip(layout.children())
         {
             child.as_widget_mut().update(
-                state, event, layout, cursor, renderer, clipboard, shell, viewport,
+                state, event, layout, cursor, renderer, shell, viewport,
             );
         }
     }

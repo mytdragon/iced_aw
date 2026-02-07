@@ -9,14 +9,18 @@ This crate contains additional widgets for the GUI library [Iced](https://github
 
 Every widget is hidden by a feature gate. This allows you to cherry pick the widgets you actually need.
 
+## TODO
+
+- [ ] `number_input` need to be fixed since [clipboard PR](https://github.com/iced-rs/iced/pull/3238).
+
 ## Usage
 
 Include `iced_aw` as a dependency in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-iced = "0.14.0"
-iced_aw = { version = "0.13.0", features = ["full"] }
+iced = "0.15.0-dev"
+iced_aw = { git = "...", branch = "0.14-dev", features = ["full"] }
 ```
 
 ## Versioning
@@ -25,6 +29,7 @@ iced_aw = { version = "0.13.0", features = ["full"] }
 | -------------- | ----------------- |
 | 0.13           | 0.11, 0.12        |
 | 0.14           | 0.13              |
+| 0.15.0-dev     | 0.14-dev (branch) |
 
 ## Widgets
 

@@ -6,7 +6,7 @@
 #![allow(clippy::enum_glob_use)]
 
 use iced_core::{
-    Clipboard, Element, Event, Layout, Length, Padding, Pixels, Rectangle, Shell, Size, Widget,
+    Element, Event, Layout, Length, Padding, Pixels, Rectangle, Shell, Size, Widget,
     alignment, event,
     layout::{Limits, Node},
     mouse, overlay, renderer,
@@ -390,7 +390,6 @@ where
         layout: Layout<'_>,
         cursor: mouse::Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -419,7 +418,7 @@ where
         )
         .for_each(|((item, tree), layout)| {
             item.update(
-                tree, event, layout, cursor, renderer, clipboard, shell, viewport,
+                tree, event, layout, cursor, renderer, shell, viewport,
             );
         });
 

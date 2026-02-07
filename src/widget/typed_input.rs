@@ -8,7 +8,7 @@ use iced_core::widget::{
     Operation, Tree, Widget,
     tree::{State, Tag},
 };
-use iced_core::{Clipboard, Shell, widget};
+use iced_core::{Shell, widget};
 use iced_core::{Element, Length, Padding, Pixels, Rectangle};
 use iced_core::{Event, Size};
 use iced_widget::text_input::{self, TextInput};
@@ -402,7 +402,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
     ) {
@@ -414,7 +413,6 @@ where
             layout,
             cursor,
             renderer,
-            clipboard,
             &mut sub_shell,
             viewport,
         );

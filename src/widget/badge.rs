@@ -3,7 +3,7 @@
 //! *This API requires the following crate features to be activated: badge*
 
 use iced_core::{
-    Alignment, Border, Clipboard, Color, Element, Event, Layout, Length, Padding, Point, Rectangle,
+    Alignment, Border, Color, Element, Event, Layout, Length, Padding, Point, Rectangle,
     Shadow, Shell, Size, Widget,
     layout::{Limits, Node},
     mouse::{self, Cursor},
@@ -185,7 +185,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
         viewport: &Rectangle,
     ) {
@@ -198,7 +197,6 @@ where
                 .expect("widget: Layout should have a children layout for a badge."),
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );

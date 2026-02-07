@@ -19,8 +19,8 @@ use crate::{
 };
 use chrono::{Duration, Local, NaiveTime, Timelike};
 use iced_core::{
-    Alignment, Border, Clipboard, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels,
-    Point, Rectangle, Renderer as _, Shell, Size, Text, Vector, Widget,
+    Alignment, Border, Color, Element, Event, Layout, Length, Overlay, Padding, Pixels, Point,
+    Rectangle, Renderer as _, Shell, Size, Text, Vector, Widget,
     alignment::{Horizontal, Vertical},
     event, keyboard,
     layout::{Limits, Node},
@@ -594,7 +594,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<Message>,
     ) {
         let mut status = self.on_event_keyboard(event);
@@ -634,7 +633,6 @@ where
             cancel_button_layout,
             cursor,
             renderer,
-            clipboard,
             &mut Shell::new(&mut fake_messages),
             &layout.bounds(),
         );
@@ -654,7 +652,6 @@ where
             submit_button_layout,
             cursor,
             renderer,
-            clipboard,
             &mut Shell::new(&mut fake_messages),
             &layout.bounds(),
         );
@@ -1641,6 +1638,7 @@ fn draw_digital_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(up_bounds.center_x(), up_bounds.center_y()),
             style
@@ -1662,6 +1660,7 @@ fn draw_digital_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(center_bounds.center_x(), center_bounds.center_y()),
             style
@@ -1685,6 +1684,7 @@ fn draw_digital_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(down_bounds.center_x(), down_bounds.center_y()),
             style
@@ -1737,6 +1737,7 @@ fn draw_digital_clock<Message, Theme>(
             line_height: text::LineHeight::Relative(1.3),
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),
+            hint_factor: renderer.scale_factor(),
         },
         Point::new(
             hour_minute_separator.bounds().center_x(),
@@ -1776,6 +1777,7 @@ fn draw_digital_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(
                 minute_second_separator.bounds().center_x(),
@@ -1817,6 +1819,7 @@ fn draw_digital_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(period.bounds().center_x(), period.bounds().center_y()),
             style[&StyleState::Active].text_color,

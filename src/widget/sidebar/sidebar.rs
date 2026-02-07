@@ -16,7 +16,7 @@ use crate::{
     },
 };
 use iced_core::{
-    Alignment, Background, Border, Clipboard, Color, Element, Event, Font, Layout, Length, Padding,
+    Alignment, Background, Border, Color, Element, Event, Font, Layout, Length, Padding,
     Pixels, Point, Rectangle, Shadow, Shell, Size, Vector, Widget,
     alignment::{self, Vertical},
     layout::{Limits, Node},
@@ -516,7 +516,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         _renderer: &Renderer,
-        _clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         _viewport: &Rectangle,
     ) {
@@ -853,6 +852,7 @@ fn draw_tab<Theme, Renderer>(
                         line_height: LineHeight::Relative(1.3),
                         shaping: iced_core::text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
+                        hint_factor: renderer.scale_factor(),
                     },
                     Point::new(icon_bounds.center_x(), icon_bounds.center_y()),
                     style.icon_color,
@@ -872,6 +872,7 @@ fn draw_tab<Theme, Renderer>(
                         line_height: LineHeight::Relative(1.3),
                         shaping: iced_core::text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
+                        hint_factor: renderer.scale_factor(),
                     },
                     Point::new(text_bounds.center_x(), text_bounds.center_y()),
                     style.text_color,
@@ -902,6 +903,7 @@ fn draw_tab<Theme, Renderer>(
                         line_height: LineHeight::Relative(1.3),
                         shaping: iced_core::text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
+                        hint_factor: renderer.scale_factor(),
                     },
                     Point::new(icon_bounds.center_x(), icon_bounds.center_y()),
                     style.icon_color,
@@ -918,6 +920,7 @@ fn draw_tab<Theme, Renderer>(
                         line_height: LineHeight::Relative(1.3),
                         shaping: iced_core::text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
+                        hint_factor: renderer.scale_factor(),
                     },
                     Point::new(text_bounds.center_x(), text_bounds.center_y()),
                     style.text_color,
@@ -951,6 +954,7 @@ fn draw_tab<Theme, Renderer>(
                 line_height: LineHeight::Relative(1.3),
                 shaping,
                 wrapping: Wrapping::default(),
+                hint_factor: renderer.scale_factor(),
             },
             Point::new(cross_bounds.center_x(), cross_bounds.center_y()),
             style.text_color,
@@ -1447,7 +1451,6 @@ where
         layout: Layout<'_>,
         cursor: Cursor,
         renderer: &Renderer,
-        clipboard: &mut dyn Clipboard,
         shell: &mut Shell<'_, Message>,
         viewport: &Rectangle,
     ) {
@@ -1478,7 +1481,6 @@ where
             sidebar_layout,
             cursor,
             renderer,
-            clipboard,
             shell,
             viewport,
         );
@@ -1490,7 +1492,6 @@ where
                 tab_content_layout,
                 cursor,
                 renderer,
-                clipboard,
                 shell,
                 viewport,
             );
