@@ -319,7 +319,7 @@ where
             Alignment::Start | Alignment::End => limits.max_height(max_height_symmetric),
         };
 
-        let mut node = self
+        let node = self
             .element
             .as_widget_mut()
             .layout(self.state, renderer, &limits);
@@ -363,22 +363,22 @@ where
             ),
         };
 
-        if new_position.x + node.bounds().width > max.width {
-            new_position.x = max.width - node.bounds().width;
+        if new_position.x + node.bounds().width > self.viewport.width {
+            new_position.x -= node.bounds().width;
         }
+
         if new_position.x < 0.0 {
             new_position.x = 0.0;
         }
 
-        if new_position.y + node.bounds().height > max.height {
-            new_position.y = max.height - node.bounds().height;
+        if new_position.y + node.bounds().height > self.viewport.height {
+            new_position.y -= node.bounds().height;
         }
         if new_position.y < 0.0 {
             new_position.y = 0.0;
         }
 
-        node.move_to_mut(new_position);
-        node
+        node.move_to(new_position)
     }
 
     fn draw(
