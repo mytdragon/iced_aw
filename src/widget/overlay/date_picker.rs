@@ -1347,6 +1347,7 @@ fn month_year(
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(left_bounds.center_x(), left_bounds.center_y()),
             style
@@ -1369,6 +1370,7 @@ fn month_year(
                 align_x: text::Alignment::Center,
                 align_y: Vertical::Center,
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(center_bounds.center_x(), center_bounds.center_y()),
             style
@@ -1391,6 +1393,7 @@ fn month_year(
                 shaping: text::Shaping::Advanced,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(right_bounds.center_x(), right_bounds.center_y()),
             style
@@ -1462,6 +1465,7 @@ fn day_labels(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(bounds.center_x(), bounds.center_y()),
             style
@@ -1561,6 +1565,7 @@ fn day_table(
                     shaping: text::Shaping::Basic,
                     wrapping: Wrapping::default(),
                     hint_factor: renderer.scale_factor(),
+                    ellipsis: text::Ellipsis::None,
                 },
                 Point::new(bounds.center_x(), bounds.center_y()),
                 if is_in_month == IsInMonth::Same {

@@ -12,6 +12,7 @@ Every widget is hidden by a feature gate. This allows you to cherry pick the wid
 ## TODO
 
 - [ ] `number_input` need to be fixed since [clipboard PR](https://github.com/iced-rs/iced/pull/3238).
+- [ ] Ellipsis, I have set None/default for most, but we might want to add a ellipsis setter for the widget probably.
 
 ## Usage
 

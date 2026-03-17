@@ -1486,6 +1486,7 @@ fn rgba_color(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::None,
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(
                 label_layout.bounds().center_x(),
@@ -1571,6 +1572,7 @@ fn rgba_color(
                 shaping: iced_widget::text::Shaping::Basic,
                 wrapping: Wrapping::None,
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(
                 value_layout.bounds().center_x(),
@@ -1714,6 +1716,7 @@ fn hex_text(
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),
             hint_factor: renderer.scale_factor(),
+            ellipsis: text::Ellipsis::None,
         },
         Point::new(bounds.center_x(), bounds.center_y()),
         Color {

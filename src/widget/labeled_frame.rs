@@ -28,7 +28,7 @@ impl Catalog for iced_widget::Theme {
 
     fn default<'a>() -> Self::Class<'a> {
         Box::new(|theme| Style {
-            color: iced_core::Background::Color(theme.extended_palette().secondary.weak.color),
+            color: iced_core::Background::Color(theme.palette().secondary.weak.color),
             radius: iced_core::border::Radius::default(),
         })
     }

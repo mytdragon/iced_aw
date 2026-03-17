@@ -1399,6 +1399,8 @@ fn draw_clock<Message, Theme>(
                 line_height: text::LineHeight::Relative(1.3),
                 shaping: text::Shaping::Basic,
                 max_width: f32::INFINITY,
+                wrapping: text::Wrapping::None,
+                ellipsis: text::Ellipsis::None,
             };
             frame.fill_text(period_text);
 
@@ -1445,6 +1447,8 @@ fn draw_clock<Message, Theme>(
                     shaping: text::Shaping::Basic,
                     line_height: text::LineHeight::Relative(1.3),
                     max_width: f32::INFINITY,
+                    wrapping: text::Wrapping::None,
+                    ellipsis: text::Ellipsis::None,
                 };
 
                 frame.fill_text(text);
@@ -1481,6 +1485,8 @@ fn draw_clock<Message, Theme>(
                         shaping: text::Shaping::Basic,
                         line_height: text::LineHeight::Relative(1.3),
                         max_width: f32::INFINITY,
+                        wrapping: text::Wrapping::None,
+                        ellipsis: text::Ellipsis::None,
                     };
 
                     frame.fill_text(text);
@@ -1528,6 +1534,8 @@ fn draw_clock<Message, Theme>(
                             shaping: text::Shaping::Basic,
                             line_height: text::LineHeight::Relative(1.3),
                             max_width: f32::INFINITY,
+                            wrapping: text::Wrapping::None,
+                            ellipsis: text::Ellipsis::None,
                         };
 
                         frame.fill_text(text);
@@ -1639,6 +1647,7 @@ fn draw_digital_clock<Message, Theme>(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(up_bounds.center_x(), up_bounds.center_y()),
             style
@@ -1661,6 +1670,7 @@ fn draw_digital_clock<Message, Theme>(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(center_bounds.center_x(), center_bounds.center_y()),
             style
@@ -1685,6 +1695,7 @@ fn draw_digital_clock<Message, Theme>(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(down_bounds.center_x(), down_bounds.center_y()),
             style
@@ -1738,6 +1749,7 @@ fn draw_digital_clock<Message, Theme>(
             shaping: text::Shaping::Basic,
             wrapping: Wrapping::default(),
             hint_factor: renderer.scale_factor(),
+            ellipsis: text::Ellipsis::None,
         },
         Point::new(
             hour_minute_separator.bounds().center_x(),
@@ -1778,6 +1790,7 @@ fn draw_digital_clock<Message, Theme>(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(
                 minute_second_separator.bounds().center_x(),
@@ -1820,6 +1833,7 @@ fn draw_digital_clock<Message, Theme>(
                 shaping: text::Shaping::Basic,
                 wrapping: Wrapping::default(),
                 hint_factor: renderer.scale_factor(),
+                ellipsis: text::Ellipsis::None,
             },
             Point::new(period.bounds().center_x(), period.bounds().center_y()),
             style[&StyleState::Active].text_color,

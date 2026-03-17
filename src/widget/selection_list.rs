@@ -232,6 +232,7 @@ where
                         shaping: text::Shaping::Advanced,
                         wrapping: Wrapping::default(),
                         hint_factor: renderer.scale_factor(),
+                        ellipsis: text::Ellipsis::None,
                     };
 
                     let _ = state.values[id].update(text);

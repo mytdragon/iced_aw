@@ -270,6 +270,7 @@ where
                     shaping: iced_widget::text::Shaping::Advanced,
                     wrapping: Wrapping::default(),
                     hint_factor: renderer.scale_factor(),
+                    ellipsis: iced_widget::text::Ellipsis::default(),
                 },
                 Point::new(bounds.x, bounds.center_y()),
                 text_color,
