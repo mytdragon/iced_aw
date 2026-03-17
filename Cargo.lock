@@ -1418,6 +1418,7 @@ dependencies = [
 [[package]]
 name = "iced_fonts"
 version = "0.3.0"
+source = "git+https://github.com/mytdragon/iced_fonts.git?branch=iced_master#c7fd7810aad6a5f3a36c4b9ff40b1935ddc15552"
 dependencies = [
  "iced_core",
  "iced_fonts_macros",
@@ -1427,6 +1428,7 @@ dependencies = [
 [[package]]
 name = "iced_fonts_macros"
 version = "0.3.0"
+source = "git+https://github.com/mytdragon/iced_fonts.git?branch=iced_master#c7fd7810aad6a5f3a36c4b9ff40b1935ddc15552"
 dependencies = [
  "proc-macro2",
  "quote",
